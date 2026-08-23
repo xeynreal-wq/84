@@ -1,0 +1,79 @@
+-- ULTRA POTATO / CLAY MODE SCRIPT (NO TEXTURES)
+-- เน้นลบ Texture ทุกส่วน ทั้งแมพ ตัวละคร ยูนิต และวัตถุทุกชิ้นในเกม
+
+local Players = game:GetService("Players")
+local Lighting = game:GetService("Lighting")
+local Terrain = workspace:FindFirstChildOfClass("Terrain")
+
+-- 1. บังคับเปลี่ยนระบบ Rendering ของตัวเกม Roblox
+pcall(function()
+    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+    sethiddenproperty(game:GetService("Lighting"), "Technology", Enum.Technology.Compatibility)
+end)
+
+-- 2. ฟังก์ชันแปลงวัตถุทุกชนิดให้กลายเป็น "ดินน้ำมันโล้นๆ"
+local function applyClayMode(v)
+    -- ลบ Texture, Decal, Clothing, Face, Accessory Details
+    if v:IsA("Decal") or v:IsA("Texture") or v:IsA("Shirt") or v:IsA("Pants") or v:IsA("ShirtGraphic") then
+        v:Destroy()
+    elseif v:IsA("SpecialMesh") then
+        v.TextureId = ""
+    elseif v:IsA("MeshPart") then
+        v.TextureID = ""
+        v.Material = Enum.Material.SmoothPlastic
+        v.Reflectance = 0
+    elseif v:IsA("BasePart") then
+        v.Material = Enum.Material.SmoothPlastic
+        v.Reflectance = 0
+    end
+
+    -- ลบ Effect ทั้งหมด (ควัน, ไฟ, ออร่าสกิล, เอฟเฟกต์ยูนิต TD)
+    if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("Sparkles") or v:IsA("Beam") or v:IsA("Highlight") then
+        v:Destroy()
+    end
+
+    -- ลบโมเดลรถ / พาหนะ
+    if v:IsA("VehicleSeat") then
+        if v.Parent then v.Parent:Destroy() end
+    elseif v:IsA("Model") then
+        local name = v.Name:lower()
+        if name:find("car") or name:find("vehicle") or name:find("truck") or name:find("bus") then
+            v:Destroy()
+        end
+    end
+end
+
+-- 3. สแกนวัตถุทั้งหมดในเกม ณ ตอนนี้ (รวม Character ของผู้เล่นด้วย)
+for _, v in pairs(game:GetDescendants()) do
+    pcall(function() applyClayMode(v) end)
+end
+
+-- 4. ดักจับ Object ใหม่ๆ (เช่น ยูนิตที่เพิ่งลง, มอนสเตอร์ที่เพิ่งเสก, หรือเอฟเฟกต์ยิง)
+game.DescendantAdded:Connect(function(v)
+    task.spawn(function()
+        pcall(function() applyClayMode(v) end)
+    end)
+end)
+
+-- 5. ปรับแสงและเงาให้แบนที่สุด
+Lighting.GlobalShadows = false
+Lighting.FogEnd = 9e9
+Lighting.Brightness = 1
+
+for _, v in pairs(Lighting:GetChildren()) do
+    if v:IsA("PostEffect") or v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("SunRaysEffect") or v:IsA("DepthOfFieldEffect") then
+        v.Enabled = false
+    end
+end
+
+if Terrain then
+    Terrain.WaterWaveSize = 0
+    Terrain.WaterWaveSpeed = 0
+    Terrain.WaterReflectance = 0
+    Terrain.WaterTransparency = 0
+    pcall(function()
+        sethiddenproperty(Terrain, "Decoration", false)
+    end)
+end
+
+print("Clay Mode Executed!")
