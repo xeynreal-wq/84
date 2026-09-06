@@ -1,0 +1,168 @@
+-- Blox Fruits: Ultimate Fix (No Fog + Anti-Bug Brightness + Server Tracker)
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local ToggleUIBtn = Instance.new("TextButton")
+local Title = Instance.new("TextLabel")
+local InfoLabel = Instance.new("TextLabel")
+local FixBrightBtn = Instance.new("TextButton")
+local ClearFogBtn = Instance.new("TextButton")
+
+ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.Name = "BF_Master_UI"
+
+-- 1. ปุ่มวงกลมเล็กสำหรับ ย่อ/ขยาย เมนู (สไตล์ Roblox)
+ToggleUIBtn.Name = "ToggleUIBtn"
+ToggleUIBtn.Parent = ScreenGui
+ToggleUIBtn.Position = UDim2.new(0.02, 0, 0.2, 0)
+ToggleUIBtn.Size = UDim2.new(0, 40, 0, 40)
+ToggleUIBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+ToggleUIBtn.Text = "BF"
+ToggleUIBtn.TextColor3 = Color3.fromRGB(0, 255, 200)
+ToggleUIBtn.TextSize = 16
+ToggleUIBtn.Font = Enum.Font.SourceSansBold
+ToggleUIBtn.Active = true
+ToggleUIBtn.Draggable = true
+
+local CircleCorner = Instance.new("UICorner")
+CircleCorner.CornerRadius = UDim.new(1, 0)
+CircleCorner.Parent = ToggleUIBtn
+
+-- 2. หน้าต่างหลัก (Main Frame)
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+MainFrame.Position = UDim2.new(0.07, 0, 0.2, 0)
+MainFrame.Size = UDim2.new(0, 230, 0, 210)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+local MainCorner = Instance.new("UICorner")
+MainCorner.Parent = MainFrame
+
+Title.Parent = MainFrame
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Text = "Blox Fruits Master"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 14
+Title.Font = Enum.Font.SourceSansBold
+
+-- กล่องข้อมูลเวลาเซิร์ฟ / คืนที่ผ่านไป
+InfoLabel.Parent = MainFrame
+InfoLabel.Position = UDim2.new(0.05, 0, 0.16, 0)
+InfoLabel.Size = UDim2.new(0.9, 0, 0.35, 0)
+InfoLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+InfoLabel.TextColor3 = Color3.fromRGB(0, 255, 200)
+InfoLabel.TextSize = 12
+InfoLabel.Font = Enum.Font.Code
+InfoLabel.TextXAlignment = Enum.TextXAlignment.Left
+InfoLabel.TextYAlignment = Enum.TextYAlignment.Top
+
+local InfoCorner = Instance.new("UICorner")
+InfoCorner.Parent = InfoLabel
+
+-- ปุ่มแก้บั๊กสว่าง
+FixBrightBtn.Parent = MainFrame
+FixBrightBtn.Position = UDim2.new(0.05, 0, 0.55, 0)
+FixBrightBtn.Size = UDim2.new(0.9, 0, 0.18, 0)
+FixBrightBtn.Text = "เปิดสว่างถาวร (แก้บั๊กคืน)"
+FixBrightBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+FixBrightBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+FixBrightBtn.TextSize = 12
+FixBrightBtn.Font = Enum.Font.SourceSansBold
+
+local Btn1Corner = Instance.new("UICorner")
+Btn1Corner.Parent = FixBrightBtn
+
+-- ปุ่มลบหมอก
+ClearFogBtn.Parent = MainFrame
+ClearFogBtn.Position = UDim2.new(0.05, 0, 0.76, 0)
+ClearFogBtn.Size = UDim2.new(0.9, 0, 0.18, 0)
+ClearFogBtn.Text = "ลบหมอก + ทำแมต"
+ClearFogBtn.BackgroundColor3 = Color3.fromRGB(255, 120, 0)
+ClearFogBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ClearFogBtn.TextSize = 12
+ClearFogBtn.Font = Enum.Font.SourceSansBold
+
+local Btn2Corner = Instance.new("UICorner")
+Btn2Corner.Parent = ClearFogBtn
+
+-- ระบบ ย่อ/ขยาย เมนู
+ToggleUIBtn.MouseButton1Click:Connect(function()
+    MainFrame.Visible = not MainFrame.Visible
+end)
+
+-- ระบบเวลาและนับคืน (100% Accurate)
+local nightCount = 0
+local isNight = false
+
+task.spawn(function()
+    while task.wait(1) do
+        local totalSeconds = math.floor(workspace.DistributedGameTime)
+        local hours = math.floor(totalSeconds / 3600)
+        local mins = math.floor((totalSeconds % 3600) / 60)
+        local secs = totalSeconds % 60
+        
+        local clockTime = game:GetService("Lighting").ClockTime
+        if (clockTime >= 18 or clockTime < 6) then
+            if not isNight then
+                isNight = true
+                nightCount = nightCount + 1
+            end
+        else
+            isNight = false
+        end
+
+        InfoLabel.Text = string.format(
+            " [ข้อมูลเซิร์ฟเวอร์]\n • อายุเซิร์ฟ: %d ชม. %d นาที %d วิ\n • ผ่านกลางคืนมาแล้ว: %d คืน\n • สถานะ: %s",
+            hours, mins, secs, nightCount, isNight and "กลางคืน 🌙" or "กลางวัน ☀️"
+        )
+    end
+end)
+
+-- แก้บั๊กสว่าง: ล็อกแสง Ambient ไว้ ไม่เปลี่ยน ClockTime ให้เกมดึงกลับ
+local brightActive = false
+FixBrightBtn.MouseButton1Click:Connect(function()
+    brightActive = not brightActive
+    local Lighting = game:GetService("Lighting")
+    
+    if brightActive then
+        FixBrightBtn.Text = "เปิดสว่างถาวรแล้ว!"
+        FixBrightBtn.BackgroundColor3 = Color3.fromRGB(0, 230, 100)
+        
+        if _G.BrightLoop then _G.BrightLoop:Disconnect() end
+        _G.BrightLoop = game:GetService("RunService").RenderStepped:Connect(function()
+            Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+            Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+            Lighting.Brightness = 2
+            Lighting.GlobalShadows = false
+        end)
+    else
+        FixBrightBtn.Text = "เปิดสว่างถาวร (แก้บั๊กคืน)"
+        FixBrightBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+        if _G.BrightLoop then _G.BrightLoop:Disconnect() end
+    end
+end)
+
+-- ระบบลบหมอก
+ClearFogBtn.MouseButton1Click:Connect(function()
+    local Lighting = game:GetService("Lighting")
+    Lighting.FogEnd = 9e9
+    Lighting.FogStart = 9e9
+    
+    for _, v in pairs(Lighting:GetChildren()) do
+        if v:IsA("Atmosphere") or v:IsA("PostEffect") or v:IsA("BloomEffect") or v:IsA("BlurEffect") then
+            v:Destroy()
+        end
+    end
+
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("BasePart") and not v:IsA("MeshPart") then
+            v.Material = Enum.Material.SmoothPlastic
+        elseif v:IsA("Decal") or v:IsA("Texture") then
+            v:Destroy()
+        end
+    end
+    
+    ClearFogBtn.Text = "ลบหมอกเรียบร้อย!"
+    ClearFogBtn.BackgroundColor3 = Color3.fromRGB(0, 230, 100)
+end)
