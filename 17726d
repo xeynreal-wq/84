@@ -1,0 +1,315 @@
+-- Blox Fruits: Master UI + Ultimate Gear Tracer & ESP Vision
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local ToggleUIBtn = Instance.new("TextButton")
+local Title = Instance.new("TextLabel")
+local InfoLabel = Instance.new("TextLabel")
+local FixBrightBtn = Instance.new("TextButton")
+local ClearFogBtn = Instance.new("TextButton")
+local GearTracerBtn = Instance.new("TextButton")
+local GearTPBtn = Instance.new("TextButton")
+local GearBeaconBtn = Instance.new("TextButton")
+local CamGearBtn = Instance.new("TextButton")
+
+ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.Name = "BF_Master_Ultimate_V2"
+
+-- 1. ปุ่มวงกลมย่อ UI
+ToggleUIBtn.Name = "ToggleUIBtn"
+ToggleUIBtn.Parent = ScreenGui
+ToggleUIBtn.Position = UDim2.new(0.02, 0, 0.2, 0)
+ToggleUIBtn.Size = UDim2.new(0, 40, 0, 40)
+ToggleUIBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+ToggleUIBtn.Text = "BF"
+ToggleUIBtn.TextColor3 = Color3.fromRGB(0, 255, 200)
+ToggleUIBtn.TextSize = 16
+ToggleUIBtn.Font = Enum.Font.SourceSansBold
+ToggleUIBtn.Active = true
+ToggleUIBtn.Draggable = true
+
+local CircleCorner = Instance.new("UICorner")
+CircleCorner.CornerRadius = UDim.new(1, 0)
+CircleCorner.Parent = ToggleUIBtn
+
+-- 2. หน้าต่างหลัก
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+MainFrame.Position = UDim2.new(0.07, 0, 0.15, 0)
+MainFrame.Size = UDim2.new(0, 250, 0, 340)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+local MainCorner = Instance.new("UICorner")
+MainCorner.Parent = MainFrame
+
+Title.Parent = MainFrame
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Text = "BF Tracker & Gear Master"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 14
+Title.Font = Enum.Font.SourceSansBold
+
+InfoLabel.Parent = MainFrame
+InfoLabel.Position = UDim2.new(0.05, 0, 0.10, 0)
+InfoLabel.Size = UDim2.new(0.9, 0, 0.20, 0)
+InfoLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+InfoLabel.TextColor3 = Color3.fromRGB(0, 255, 200)
+InfoLabel.TextSize = 11
+InfoLabel.Font = Enum.Font.Code
+InfoLabel.TextXAlignment = Enum.TextXAlignment.Left
+InfoLabel.TextYAlignment = Enum.TextYAlignment.Top
+
+local InfoCorner = Instance.new("UICorner")
+InfoCorner.Parent = InfoLabel
+
+-- ปุ่มต่างๆ
+FixBrightBtn.Parent = MainFrame
+FixBrightBtn.Position = UDim2.new(0.05, 0, 0.32, 0)
+FixBrightBtn.Size = UDim2.new(0.9, 0, 0.10, 0)
+FixBrightBtn.Text = "เปิดสว่างถาวร (แก้บั๊กคืน)"
+FixBrightBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+FixBrightBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+FixBrightBtn.Font = Enum.Font.SourceSansBold
+
+ClearFogBtn.Parent = MainFrame
+ClearFogBtn.Position = UDim2.new(0.05, 0, 0.43, 0)
+ClearFogBtn.Size = UDim2.new(0.9, 0, 0.10, 0)
+ClearFogBtn.Text = "ลบหมอก + ทำแมต"
+ClearFogBtn.BackgroundColor3 = Color3.fromRGB(255, 120, 0)
+ClearFogBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ClearFogBtn.Font = Enum.Font.SourceSansBold
+
+GearTracerBtn.Parent = MainFrame
+GearTracerBtn.Position = UDim2.new(0.05, 0, 0.54, 0)
+GearTracerBtn.Size = UDim2.new(0.9, 0, 0.10, 0)
+GearTracerBtn.Text = "ยิงเส้นเลเซอร์นำทางหาเฟือง"
+GearTracerBtn.BackgroundColor3 = Color3.fromRGB(180, 0, 255)
+GearTracerBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+GearTracerBtn.Font = Enum.Font.SourceSansBold
+
+-- ฟังก์ชันที่เพิ่มมาใหม่ 1: เสาไฟบีคอนยิงขึ้นฟ้า
+GearBeaconBtn.Parent = MainFrame
+GearBeaconBtn.Position = UDim2.new(0.05, 0, 0.65, 0)
+GearBeaconBtn.Size = UDim2.new(0.9, 0, 0.10, 0)
+GearBeaconBtn.Text = "ยิงเสาไฟสีฟ้าพุ่งขึ้นท้องฟ้า (Light Beacon)"
+GearBeaconBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 255)
+GearBeaconBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+GearBeaconBtn.Font = Enum.Font.SourceSansBold
+
+-- ฟังก์ชันที่เพิ่มมาใหม่ 2: ย้ายกล้องไปส่องเฟืองระยะเผาขน
+CamGearBtn.Parent = MainFrame
+CamGearBtn.Position = UDim2.new(0.05, 0, 0.76, 0)
+CamGearBtn.Size = UDim2.new(0.9, 0, 0.10, 0)
+CamGearBtn.Text = "ส่องกล้องดูตำแหน่งเฟืองสดๆ (Cam Spectate)"
+CamGearBtn.BackgroundColor3 = Color3.fromRGB(230, 200, 0)
+CamGearBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+CamGearBtn.Font = Enum.Font.SourceSansBold
+
+GearTPBtn.Parent = MainFrame
+GearTPBtn.Position = UDim2.new(0.05, 0, 0.87, 0)
+GearTPBtn.Size = UDim2.new(0.9, 0, 0.10, 0)
+GearTPBtn.Text = "วาร์ปไปเหยียบตัวเฟือง"
+GearTPBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 100)
+GearTPBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+GearTPBtn.Font = Enum.Font.SourceSansBold
+
+Instance.new("UICorner").Parent = FixBrightBtn
+Instance.new("UICorner").Parent = ClearFogBtn
+Instance.new("UICorner").Parent = GearTracerBtn
+Instance.new("UICorner").Parent = GearBeaconBtn
+Instance.new("UICorner").Parent = CamGearBtn
+Instance.new("UICorner").Parent = GearTPBtn
+
+-- Logic ย่อ UI
+ToggleUIBtn.MouseButton1Click:Connect(function()
+    MainFrame.Visible = not MainFrame.Visible
+end)
+
+-- ระบบเวลา
+local nightCount = 0
+local isNight = false
+task.spawn(function()
+    while task.wait(1) do
+        local totalSeconds = math.floor(workspace.DistributedGameTime)
+        local hours = math.floor(totalSeconds / 3600)
+        local mins = math.floor((totalSeconds % 3600) / 60)
+        local secs = totalSeconds % 60
+        
+        local clockTime = game:GetService("Lighting").ClockTime
+        if (clockTime >= 18 or clockTime < 6) then
+            if not isNight then
+                isNight = true
+                nightCount = nightCount + 1
+            end
+        else
+            isNight = false
+        end
+
+        InfoLabel.Text = string.format(
+            " [ข้อมูลเซิร์ฟเวอร์]\n • อายุเซิร์ฟ: %d ชม. %d นาที %d วิ\n • ผ่านกลางคืนมาแล้ว: %d คืน\n • สถานะ: %s",
+            hours, mins, secs, nightCount, isNight and "กลางคืน 🌙" or "กลางวัน ☀️"
+        )
+    end
+end)
+
+-- สว่างถาวร
+local brightActive = false
+FixBrightBtn.MouseButton1Click:Connect(function()
+    brightActive = not brightActive
+    local Lighting = game:GetService("Lighting")
+    if brightActive then
+        FixBrightBtn.Text = "เปิดสว่างถาวรแล้ว!"
+        FixBrightBtn.BackgroundColor3 = Color3.fromRGB(0, 230, 100)
+        if _G.BrightLoop then _G.BrightLoop:Disconnect() end
+        _G.BrightLoop = game:GetService("RunService").RenderStepped:Connect(function()
+            Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+            Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+            Lighting.Brightness = 2
+            Lighting.GlobalShadows = false
+        end)
+    else
+        FixBrightBtn.Text = "เปิดสว่างถาวร (แก้บั๊กคืน)"
+        FixBrightBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+        if _G.BrightLoop then _G.BrightLoop:Disconnect() end
+    end
+end)
+
+-- ลบหมอก
+ClearFogBtn.MouseButton1Click:Connect(function()
+    local Lighting = game:GetService("Lighting")
+    Lighting.FogEnd = 9e9
+    Lighting.FogStart = 9e9
+    for _, v in pairs(Lighting:GetChildren()) do
+        if v:IsA("Atmosphere") or v:IsA("PostEffect") or v:IsA("BloomEffect") or v:IsA("BlurEffect") then
+            v:Destroy()
+        end
+    end
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("BasePart") and not v:IsA("MeshPart") then
+            v.Material = Enum.Material.SmoothPlastic
+        elseif v:IsA("Decal") or v:IsA("Texture") then
+            v:Destroy()
+        end
+    end
+    ClearFogBtn.Text = "ลบหมอกเรียบร้อย!"
+    ClearFogBtn.BackgroundColor3 = Color3.fromRGB(0, 230, 100)
+end)
+
+-- ยิงเส้นเลเซอร์
+GearTracerBtn.MouseButton1Click:Connect(function()
+    local targetGear = nil
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v.Name == "Gear" or v.Name == "MysticGear" or (v:IsA("BasePart") and string.find(v.Name, "Gear")) then
+            targetGear = v
+            break
+        end
+    end
+
+    if targetGear then
+        local hl = Instance.new("Highlight")
+        hl.Parent = targetGear
+        hl.FillColor = Color3.fromRGB(0, 255, 255)
+        hl.OutlineColor = Color3.fromRGB(255, 255, 255)
+
+        local char = game.Players.LocalPlayer.Character
+        if char and char:FindFirstChild("HumanoidRootPart") then
+            local a0 = Instance.new("Attachment", char.HumanoidRootPart)
+            local a1 = Instance.new("Attachment", targetGear)
+            local beam = Instance.new("Beam", char.HumanoidRootPart)
+            beam.Attachment0 = a0
+            beam.Attachment1 = a1
+            beam.Color = ColorSequence.new(Color3.fromRGB(0, 255, 255))
+            beam.Width0 = 0.5
+            beam.Width1 = 0.5
+            beam.FaceCamera = true
+        end
+
+        GearTracerBtn.Text = "เจอเฟือง! ยิงเส้นนำทางแล้ว"
+        GearTracerBtn.BackgroundColor3 = Color3.fromRGB(0, 230, 100)
+    else
+        GearTracerBtn.Text = "ยังไม่พบเฟืองในแมพ"
+    end
+end)
+
+-- 1. ยิงเสาไฟบีคอนสีฟ้าพุ่งทะลุฟ้า (Beacon Light)
+GearBeaconBtn.MouseButton1Click:Connect(function()
+    local targetGear = nil
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v.Name == "Gear" or v.Name == "MysticGear" or (v:IsA("BasePart") and string.find(v.Name, "Gear")) then
+            targetGear = v
+            break
+        end
+    end
+
+    if targetGear then
+        local beacon = Instance.new("Part")
+        beacon.Size = Vector3.new(2, 2000, 2)
+        beacon.Position = targetGear.Position + Vector3.new(0, 1000, 0)
+        beacon.Anchored = true
+        beacon.CanCollide = false
+        beacon.Material = Enum.Material.Neon
+        beacon.Color = Color3.fromRGB(0, 255, 255)
+        beacon.Transparency = 0.2
+        beacon.Parent = workspace
+
+        GearBeaconBtn.Text = "ยิงเสาไฟฟ้าขึ้นฟ้าแล้ว!"
+        GearBeaconBtn.BackgroundColor3 = Color3.fromRGB(0, 230, 100)
+    else
+        GearBeaconBtn.Text = "ยังไม่พบเฟืองในแมพ"
+    end
+end)
+
+-- 2. ส่องกล้องตรงไปที่ตัวเฟืองทันที (Cam Spectate)
+local spectating = false
+CamGearBtn.MouseButton1Click:Connect(function()
+    local targetGear = nil
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v.Name == "Gear" or v.Name == "MysticGear" or (v:IsA("BasePart") and string.find(v.Name, "Gear")) then
+            targetGear = v
+            break
+        end
+    end
+
+    local cam = workspace.CurrentCamera
+    local char = game.Players.LocalPlayer.Character
+
+    if targetGear then
+        spectating = not spectating
+        if spectating then
+            cam.CameraType = Enum.CameraType.Scriptable
+            cam.CFrame = CFrame.new(targetGear.Position + Vector3.new(0, 5, 8), targetGear.Position)
+            CamGearBtn.Text = "กำลังส่องเฟือง (กดซ้ำเพื่อยกเลิก)"
+            CamGearBtn.BackgroundColor3 = Color3.fromRGB(0, 230, 100)
+        else
+            if char and char:FindFirstChild("Humanoid") then
+                cam.CameraType = Enum.CameraType.Custom
+                cam.CameraSubject = char.Humanoid
+            end
+            CamGearBtn.Text = "ส่องกล้องดูตำแหน่งเฟืองสดๆ"
+            CamGearBtn.BackgroundColor3 = Color3.fromRGB(230, 200, 0)
+        end
+    else
+        CamGearBtn.Text = "ยังไม่พบเฟืองในแมพ"
+    end
+end)
+
+-- วาร์ป
+GearTPBtn.MouseButton1Click:Connect(function()
+    local targetGear = nil
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v.Name == "Gear" or v.Name == "MysticGear" or (v:IsA("BasePart") and string.find(v.Name, "Gear")) then
+            targetGear = v
+            break
+        end
+    end
+
+    local char = game.Players.LocalPlayer.Character
+    if targetGear and char and char:FindFirstChild("HumanoidRootPart") then
+        char.HumanoidRootPart.CFrame = targetGear.CFrame * CFrame.new(0, 3, 0)
+        GearTPBtn.Text = "วาร์ปสำเร็จ!"
+        GearTPBtn.BackgroundColor3 = Color3.fromRGB(0, 230, 100)
+    else
+        GearTPBtn.Text = "ยังไม่พบเฟืองในแมพ"
+    end
+end)
